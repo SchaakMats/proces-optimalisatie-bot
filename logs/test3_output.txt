@@ -1,0 +1,52 @@
+# ❌ Onvoldoende context — ik kan deze analyse niet uitvoeren
+
+---
+
+## Waarom ik nu geen output geef
+
+De bedrijfscontext is **volledig leeg**. Er is geen bedrijfsnaam, branche, proces of situatie aangeleverd. Een analyse uitvoeren zonder deze informatie zou betekenen dat ik **generieke adviezen produceer die niet bruikbaar zijn** voor een klantgesprek — en dat is precies wat deze tool niet doet.
+
+Het risico van een lege analyse is groter dan geen analyse: je zou de klant kunnen confronteren met irrelevante bevindingen, wat vertrouwen schaadt.
+
+---
+
+## Wat ik minimaal nodig heb
+
+Om een zinvolle procesoptimalisatieanalyse te kunnen uitvoeren, heb ik **minimaal** het volgende nodig:
+
+| Veld | Voorbeeld | Verplicht? |
+|---|---|---|
+| **Bedrijfsnaam of -type** | "Bakkerij de Wit" of "anoniem MKB-bedrijf" | ✅ Ja |
+| **Branche** | Logistiek, zorg, bouw, retail, productie... | ✅ Ja |
+| **Eén of meer kernprocessen** | Orderverwerking, inkoop, facturatie... | ✅ Ja |
+| **Huidige situatie** | Korte beschrijving van hoe het nu gaat | ✅ Ja |
+
+---
+
+## Wat optioneel is maar de analyse sterk verbetert
+
+- Bekende knelpunten (wat gaat er al mis?)
+- Bedrijfsgrootte (medewerkers / omzet)
+- Beschikbare data (interviews, documenten, processcans)
+- Jouw specifieke focus als consultant
+
+---
+
+## Hoe je dit aanlevert
+
+Gebruik deze invulstructuur en stuur het opnieuw:
+
+```
+Bedrijfsnaam: [naam of "anoniem"]
+Branche: [branche]
+Bedrijfsgrootte: [bijv. 45 medewerkers, €3M omzet]
+Kernprocessen: [bijv. orderverwerking en facturatie]
+Huidige situatie: [korte beschrijving]
+Beschikbare data: [bijv. 2 interviews, geen documenten]
+Bekende knelpunten: [optioneel]
+Consultant-focus: [bijv. "waar zit de meeste tijdverspilling?"]
+```
+
+---
+
+Zodra je deze informatie aanlevert, produceer ik direct een volledige, klantklare procesanalyse.

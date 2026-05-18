@@ -1,0 +1,81 @@
+```
+## Samenvatting
+
+WR Schoonmaakspecialisten is een schoonmaakbedrijf in Wesepe met zelfgerapporteerde problemen
+in de werkplanning. De beschikbare informatie is minimaal: geen bedrijfsgrootte, geen data
+over het huidige planningsproces, geen concrete klachten. Deze analyse is daarom sterk
+aanname-gedreven op basis van sectorkennis. Gebruik deze output als gespreksvoorbereiding,
+niet als eindconclusie.
+
+---
+
+## Contextcheck — wat weet ik wel / niet?
+
+**Wat ik weet:**
+- Bedrijfsnaam en locatie: WR Schoonmaakspecialisten, Wesepe
+- Branche: schoonmaak
+- Er zijn problemen met werkplanning
+
+**Wat ontbreekt:**
+- Bedrijfsgrootte (medewerkers, omzet) — cruciaal voor haalbaarheid van oplossingen
+- Type schoonmaak: kantoor, bouw, zorg, particulier, of combinatie?
+- Huidig planningsinstrument: Excel, WhatsApp, mondelinge afspraken, software?
+- Aard van de problemen: te late inzet, roostertekorten, no-shows, klantklachten?
+- Of planning intern of extern (klant-gestuurd) wordt bepaald
+
+**Aannames die ik maak:**
+- [AANNAME] Klein MKB-bedrijf (10–50 medewerkers) op basis van locatie en branche
+- [AANNAME] Planning gebeurt handmatig of via eenvoudige tools (Excel/WhatsApp)
+- [AANNAME] Er zijn wisselende objecten/locaties met variabele bezetting
+- [AANNAME] Medewerkers zijn parttime of oproepkracht, wat planning complex maakt
+
+---
+
+## Proceskaart
+
+**Procesnaam: Werkplanning medewerkers**
+
+| Stap | Omschrijving | Rollen | Label |
+|------|-------------|--------|-------|
+| 1 | Klantorder / opdracht binnenkomt | Klant, Planner | [AANNAME] |
+| 2 | Beschikbaarheid medewerkers controleren | Planner | [AANNAME] |
+| 3 | Medewerker(s) koppelen aan object/locatie | Planner | [AANNAME] |
+| 4 | Communicatie rooster naar medewerker | Planner → Medewerker | [AANNAME] |
+| 5 | Medewerker bevestigt of meldt verhindering | Medewerker → Planner | [AANNAME] |
+| 6 | Uitvoering schoonmaakwerkzaamheden | Medewerker | [AANNAME] |
+| 7 | Controle/terugkoppeling kwaliteit | Leidinggevende / Klant | [AANNAME] |
+
+Invoer: klantvraag, medewerkersbeschikbaarheid
+Uitvoer: ingevuld rooster + uitgevoerde opdracht
+
+---
+
+## Verspillingsanalyse (TIMWOODS)
+
+**Waiting** [SECTORKENNIS]
+Wachttijd bij het ophalen van beschikbaarheid van medewerkers. In schoonmaak veelvoorkomend
+via appjes heen en weer sturen. Vertraagt planningsproces structureel.
+
+**Defects** [SECTORKENNIS]
+Planningsfouten: verkeerde medewerker op verkeerd object, dubbele bezetting of juist gaten.
+Leidt tot last-minute herstelwerk en klantklachten.
+
+**Overprocessing** [SECTORKENNIS]
+Handmatig overzetten van roosters naar meerdere kanalen (papier, app, telefoon). Meer
+handelingen dan nodig voor hetzelfde resultaat.
+
+**Skills** [SECTORKENNIS]
+Planner besteedt onevenredig veel tijd aan operationele communicatie in plaats van
+coördinatie en kwaliteitscontrole. Talent wordt benut voor administratief werk.
+
+**Inventory** [AANNAME]
+Mogelijke wachtlijst van medewerkers die niet optimaal worden ingezet, of juist tekorten
+op specifieke dagen/locaties zonder structureel overzicht.
+
+---
+
+## Optimalisatiepotentieel
+
+| Knelpunt | Oplossing | Impact | Automatiseerbaar? |
+|---------|-----------|--------|-------------------|
+| Beschikbaarheid ophalen via losse appjes | Digitaal beschikbaarheidsformulier of planningsapp (bijv. Shiftbase, Timewax, of Homebase) | Hoog [AANNAME] |

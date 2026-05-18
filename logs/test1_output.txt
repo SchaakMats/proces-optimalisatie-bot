@@ -1,0 +1,107 @@
+# Procesoptimalisatieanalyse — WR Schoonmaakspecialisten
+
+---
+
+## Samenvatting
+
+WR Schoonmaakspecialisten is een groeiend schoonmaakbedrijf (18 fte) waar de directeur nog sterk operationeel betrokken is bij planning, communicatie en kwaliteitscontrole. De grootste risico's zitten in handmatige planning via WhatsApp, ontbrekende kwaliteitsborging en foutgevoelige urenregistratie. Digitalisering van drie kernprocessen kan de directeur substantieel ontlasten en de groeicapaciteit vergroten zonder extra overhead. De aanbevelingen zijn gebaseerd op een mix van aangeleverde knelpunten en sectorkennis — zie kwaliteitsscore voor nuancering.
+
+---
+
+## Contextcheck — wat weet ik wel / niet?
+
+**Wat ik weet (op basis van aangeleverde data):**
+- 5 concrete knelpunten zijn beschreven door de consultant
+- HR/administratie is gecentraliseerd bij So Toff — een positieve stap
+- Planning en kwaliteitscontrole verlopen handmatig en reactief
+- Directeur is het communicatieknooppunt voor klachten én roosterwijzigingen
+- Bedrijf is recentelijk geprofessionaliseerd (nieuw pand, gecentraliseerde HR)
+
+**Wat ontbreekt of onduidelijk is:**
+- Exacte tijdsbesteding directeur aan operationele taken (uren per week)
+- Huidige klanttevredenheidsdata of klachtenfrequentie
+- Welke (digitale) tools momenteel al in gebruik zijn
+- Contractvorm medewerkers (vast/flex/oproep) — relevant voor planning
+- Marge- en omzetcijfers — nodig voor ROI-onderbouwing
+
+**Aannames die ik maak:**
+- `[AANNAME]` De directeur besteedt >50% van zijn werkweek aan operationele/reactieve taken
+- `[AANNAME]` Geen planningssoftware in gebruik — enkel WhatsApp/telefoon
+- `[AANNAME]` Medewerkers hebben een smartphone beschikbaar
+- `[SECTORKENNIS]` In de schoonmaakbranche is last-minute uitval een structureel en veelvoorkomend probleem
+
+---
+
+## Proceskaart
+
+### Proces 1 — Werkplanning & Roostering
+| Element | Beschrijving | Type |
+|---|---|---|
+| Invoer | Klantafspraken, beschikbaarheid medewerkers | FEIT |
+| Stap 1 | Directeur stelt weekrooster op (handmatig) | FEIT |
+| Stap 2 | Communicatie rooster via WhatsApp/telefoon | FEIT |
+| Stap 3 | Bij uitval: directeur belt handmatig vervanging | FEIT |
+| Uitvoer | Medewerker weet waar en wanneer | FEIT |
+| Knelpunt | Geen systeem, volledig afhankelijk van één persoon | FEIT |
+
+### Proces 2 — Uitvoering & Kwaliteitscontrole
+| Element | Beschrijving | Type |
+|---|---|---|
+| Invoer | Reisopdracht + materialen | FEIT |
+| Stap 1 | Medewerker reist naar locatie | FEIT |
+| Stap 2 | Uitvoering schoonmaakwerk | FEIT |
+| Stap 3 | Kwaliteitscheck (indien aanwezig) | AANNAME |
+| Stap 4 | Klant meldt klacht achteraf (reactief) | FEIT |
+| Uitvoer | Schone locatie — kwaliteit ongeborgd | INTERPRETATIE |
+
+### Proces 3 — Urenregistratie & Administratie
+| Element | Beschrijving | Type |
+|---|---|---|
+| Invoer | Gewerkte uren medewerker | FEIT |
+| Stap 1 | Medewerker noteert uren (papier/WhatsApp) | FEIT |
+| Stap 2 | Overdracht naar So Toff | FEIT |
+| Stap 3 | Verwerking salarisadministratie | FEIT |
+| Knelpunt | Fouten door informele aanlevering | FEIT |
+
+### Proces 4 — Materiaal- & Middelenbeheer
+| Element | Beschrijving | Type |
+|---|---|---|
+| Invoer | Opdracht planning | FEIT |
+| Stap 1 | Medewerker schat benodigdheden in | FEIT |
+| Stap 2 | Ad hoc bestelling of meenemen vanuit depot | AANNAME |
+| Knelpunt | Geen centrale controle, tekorten mogelijk | FEIT |
+
+---
+
+## Verspillingsanalyse (TIMWOODS)
+
+| Categorie | Verspilling | Ernst |
+|---|---|---|
+| **Waiting** | Medewerkers wachten op bevestiging rooster via WhatsApp; directeur wacht op urenmeldingen | Hoog |
+| **Defects** | Fouten in urenregistratie → herwerk bij So Toff; klachten die reactief binnenkomen i.p.v. preventief onderschept | Hoog |
+| **Overprocessing** | Directeur handelt elke roosterwijziging persoonlijk af — stap die gedeeltelijk gedelegeerd of geautomatiseerd kan worden | Hoog |
+| **Skills** | Directeur functioneert als planner, klachtenbehandelaar én accountmanager tegelijk — strategische capaciteit wordt verspild aan operationele taken | Hoog |
+| **Inventory** | Materialen zonder centraal beheer → zowel tekorten als overbodige voorraden waarschijnlijk `[AANNAME]` | Gemiddeld |
+| **Transport** | Medewerkers reizen mogelijk met verkeerde of ontbrekende materialen naar locatie `[AANNAME]` | Gemiddeld |
+| **Motion** | Meerdere communicatiekanalen (WhatsApp, telefoon, mondeling) zorgen voor onnodige informatiebewegingen | Gemiddeld |
+| **Overproduction** | Niet van toepassing in deze context | N.v.t. |
+
+---
+
+## Optimalisatiepotentieel
+
+### 1. Werkplanning digitaliseren
+
+**Oplossing:** Implementeer een lichtgewicht planningssysteem geschikt voor mobiele medewerkers, zoals **Shiftbase**, **Rotaready** of **Sling** (alle betaalbaar voor MKB, <€5/medewerker/maand). Medewerkers kunnen roosters inzien via app, uitval melden en beschikbaarheid doorgeven zonder directe tussenkomst van de directeur.
+
+- **Impact:** Hoog `[AANNAME — tijdsbesparing niet kwantificeerbaar zonder huidige meting]`
+- **Automatiseerbaar:** Deels — roosteropbouw blijft menselijk oordeel, communicatie en meldingen worden geautomatiseerd
+- **Randvoorwaarde:** Medewerkers hebben smartphone en accepteren digitale tool
+
+---
+
+### 2. Urenregistratie standaardiseren
+
+**Oplossing:** Koppel een digitale urenregistratie-app (bijv. **Clockify**, **TMetric** of module binnen planningssysteem) aan de werkwijze van So Toff. Medewerkers klokken in/uit via telefoon. Gegevens gaan automatisch naar So Toff zonder handmatig tussenstation.
+
+- **Impact:** Hoog — vermindert fouten in salarisverwerking direct `[SECTORKENNIS: digitale tij

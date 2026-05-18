@@ -1,0 +1,76 @@
+```
+## Samenvatting
+
+Van der Berg BV heeft drie processen die structureel bijdragen aan margedruk: offertebeheer,
+materiaalinkoop en urenregistratie. Alle drie kenmerken zich door handmatig werk, geen centrale
+dataverzameling en gebrek aan real-time inzicht. De grootste winst zit in urenregistratie
+digitaliseren (laagste weerstand, directe koppeling aan projectkosten) en offerteopvolging
+structureren (direct omzetimpact). Een volledig ERP-systeem is op dit moment prematuur — eerst
+processen stabiliseren, dan digitaliseren.
+
+---
+
+## Contextcheck — wat weet ik wel / niet?
+
+**Wat ik weet (op basis van aangeleverde data):**
+- Drie kernprocessen zijn beschreven met rollen, frequenties en bekende knelpunten [FEIT]
+- Administratie is ~3–4 uur/week kwijt aan handmatige ureninvoer [FEIT — directeur/interview]
+- 6–10 offertes per week, gemiddeld 4 werkdagen doorlooptijd [FEIT]
+- Bonnetjes worden maandelijks in bulk verwerkt — geen real-time kostendata [FEIT]
+- Exact Online is al in gebruik [FEIT — relevant voor aansluitkeuzes]
+
+**Wat ontbreekt:**
+- Hoeveel offertes worden gewonnen vs. verloren? (conversieratio onbekend)
+- Wat zijn de gemiddelde projectkosten vs. offertebedrag? (marge per project onbekend)
+- Welke materiaalcategorieën veroorzaken de meeste dubbele inkopen?
+- Capaciteit en digitale vaardigheid van medewerkers (acceptatie van tools)
+
+**Aannames die ik maak:**
+- [AANNAME] Uitvoerders hebben smartphones en kunnen daarmee omgaan
+- [AANNAME] Exact Online-abonnement omvat of ondersteunt projectregistratie
+- [AANNAME] De directeur is de enige formele beslisser voor investeringen
+
+---
+
+## Proceskaart
+
+**Proces 1 — Offerte & Projectopstart**
+- Invoer: Klantvraag via telefoon/mail
+- Stappen:
+  1. Klantcontact ontvangen → uitvoerder ingepland [FEIT]
+  2. Locatiebezoek + handgeschreven notities [FEIT]
+  3. Offerte uitgetypt in Word op kantoor [FEIT]
+  4. Directeur accordeert [FEIT]
+  5. Mail naar klant → wachten op reactie [FEIT]
+  6. Na akkoord: projectmap aangemaakt op gedeelde schijf [FEIT]
+- Uitvoer: Projectmap, gestuurde offerte
+- Knelpunt: Geen systeem voor opvolging; versies lopen door elkaar [FEIT]
+
+**Proces 2 — Materiaalinkoop**
+- Invoer: Materiaalbehoefte op projectlocatie
+- Stappen:
+  1. Uitvoerder schat behoefte in (hoofd of notitie) [FEIT]
+  2. Bestelling via WhatsApp/telefoon bij leverancier [FEIT]
+  3. Levering op locatie of magazijn [FEIT]
+  4. Bonnetje bewaard → maandelijks naar boekhouder [FEIT]
+- Uitvoer: Materiaal op locatie, bon in schoenendoos
+- Knelpunt: Geen koppeling aan projectbudget, geen centrale zichtbaarheid [FEIT]
+
+**Proces 3 — Urenregistratie**
+- Invoer: Gewerkte uren per medewerker
+- Stappen:
+  1. Medewerker schrijft uren dagelijks op papier [FEIT]
+  2. Vrijdag: formulier inleveren bij administratie [FEIT]
+  3. Administratie voert handmatig in in Exact Online [FEIT]
+- Uitvoer: Urenadministratie in Exact Online
+- Knelpunt: Vertraging, fouten, geen koppeling aan projectbudgetten [FEIT]
+
+---
+
+## Verspillingsanalyse (TIMWOODS)
+
+| Categorie | Bevinding | Label |
+|---|---|---|
+| **Transport** | Bonnetjes fysiek verplaatsen van locatie naar kantoor naar boekhouder | FEIT |
+| **Inventory** | Overtollige materialen op locaties door gebrek aan inkoopcoördinatie | FEIT |
+| **Motion** | Uitvoerder rijdt naar

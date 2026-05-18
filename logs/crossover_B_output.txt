@@ -1,0 +1,74 @@
+## Samenvatting
+
+De consultantvraag betreft een ROI-berekening voor digitalisering van het offerteproces. Deze vraag kan ik **niet volledig beantwoorden** met de beschikbare data — de financiële randcijfers ontbreken daarvoor. Wat ik wél kan doen: een transparante ROI-raming opstellen op basis van de beschikbare procesinformatie, met expliciete markering van elke aanname. De consultant moet deze cijfers valideren bij de klant vóór gebruik in een adviesgesprek.
+
+---
+
+## Contextcheck — wat weet ik wel / niet?
+
+**Wel bekend:**
+- 6–10 offertes per week (directeursgesprek)
+- Doorlooptijd offerte: gemiddeld 4 werkdagen
+- Administratietijd urenverwerking: 3–4 uur/week
+- Bekende problemen: gemiste opdrachten door slechte opvolging, versiechaos, klantenklachten
+
+**Ontbreekt voor een onderbouwde ROI:**
+- Gemiddelde offertewaarde / marge per gewonnen opdracht
+- Huidige conversieratio offerte → opdracht
+- Exacte tijdsbesteding uitvoerder per offerte (geen meting beschikbaar)
+- Salariskosten per rol (uitvoerder, administratie)
+- Kosten van eventuele software-investering
+
+**Conclusie:** Een "concrete berekening" is op dit moment **niet verantwoord**. Ik stel hieronder een **transparante raming** op met gemarkeerde aannames — bruikbaar als gespreksstructuur met de directeur, niet als boardroom-presentatie.
+
+---
+
+## ROI-raming Offerteproces — Structuur en Aannames
+
+### Stap 1 — Tijdswinst identificeren
+
+| Activiteit | Huidige situatie | Na digitalisering | Tijdswinst |
+|---|---|---|---|
+| Offerte opstellen (uitvoerder) | `[AANNAME]` ~1,5 uur per offerte | ~0,5 uur met sjabloon/tool | ~1 uur/offerte |
+| Offertes per week | 6–10 (feit, directeur) | gelijk | gemiddeld 8/week |
+| **Wekelijkse tijdswinst uitvoerder** | — | — | **~8 uur/week** |
+| Opvolgbeheer (nu: ad hoc/vergeten) | `[AANNAME]` ~1 uur/week verloren | Geautomatiseerde reminders | ~1 uur/week |
+
+> ⚠️ De tijdscijfers per offerte zijn **niet gemeten**. Laat de uitvoerders dit één week bijhouden vóór je deze raming presenteert.
+
+---
+
+### Stap 2 — Omzetpotentieel gemiste opdrachten
+
+Dit is de meest impactvolle maar ook meest onzekere factor.
+
+**Redenering:**
+
+- `[AANNAME]` Huidige conversieratio: ~40% (branchekenmerk renovatiebouw, `[SECTORKENNIS]`)
+- `[AANNAME]` Verbetering door actieve opvolging: +5–10 procentpunt
+- Gemiddeld 8 offertes/week = ~400 offertes/jaar
+- `[AANNAME]` Gemiddelde offertewaarde: **onbekend** — dit moet de directeur aanleveren
+
+**Rekenvoorbeeld (invulformaat voor consultant):**
+
+```
+Gemiddelde offertewaarde:         € ______
+Huidige conversieratio:           ____%
+Verbeterde conversieratio:        ____%
+Extra opdrachten per jaar:        ______
+Gemiddelde marge per opdracht:    ____%
+
+Extra bruto marge per jaar:       € ______
+```
+
+> Zodra de directeur deze cijfers aanlevert, kan de consultant dit invullen. Zonder deze data is elk concreet bedrag **misleidend**.
+
+---
+
+### Stap 3 — Kosten van digitalisering (indicatief)
+
+| Optie | Indicatieve kosten | Geschikt voor Van der Berg? |
+|---|---|---|
+| Offertetool (bijv. Offorte, Quoter NL) | `[SECTORKENNIS]` €30–80/maand | Ja — laagdrempelig |
+| CRM met offertebeheer (bijv. Simplicate, AFAS Lite) | `[SECTORKENNIS]` €100–250/maand | Mogelijk — vraag licentiestructuur op |
+| Maatwerk koppeling aan Exact Online | `[AAN

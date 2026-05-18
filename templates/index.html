@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Process Optimization Agent</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f0f2f5;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #1a1a2e;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #0d1b2e;
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge {
+      background: #1abc9c;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    header h1 {
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .company-label {
+      color: #8899aa;
+      font-size: 13px;
+    }
+
+    select {
+      background: #1a2d47;
+      color: #fff;
+      border: 1px solid #2a4060;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      outline: none;
+      min-width: 220px;
+    }
+
+    select:focus { border-color: #1abc9c; }
+
+    .btn-new {
+      background: transparent;
+      border: 1px solid #2a4060;
+      color: #8899aa;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-new:hover { border-color: #1abc9c; color: #1abc9c; }
+
+    /* ── Chat area ── */
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+
+    /* ── Welcome ── */
+    .welcome {
+      max-width: 640px;
+      margin: 24px auto 0;
+      text-align: center;
+    }
+
+    .welcome h2 {
+      font-size: 22px;
+      color: #0d1b2e;
+      margin-bottom: 8px;
+    }
+
+    .welcome p {
+      color: #556;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .suggestions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .suggestion-btn {
+      background: #fff;
+      border: 1px solid #dde3ec;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: #334;
+      cursor: pointer;
+      text-align: left;
+      line-height: 1.45;
+      transition: all 0.15s;
+    }
+    .suggestion-btn:hover { border-color: #1abc9c; background: #f0fdf8; color: #0d7a5e; }
+
+    /* ── Messages ── */
+    .msg-row {
+      display: flex;
+      gap: 10px;
+      max-width: 820px;
+      width: 100%;
+    }
+
+    .msg-row.user { align-self: flex-end; flex-direction: row-reverse; }
+    .msg-row.assistant { align-self: flex-start; }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .msg-row.user .avatar { background: #1abc9c; color: #fff; }
+    .msg-row.assistant .avatar { background: #0d1b2e; color: #1abc9c; }
+
+    .bubble {
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 100%;
+    }
+
+    .msg-row.user .bubble {
+      background: #1abc9c;
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg-row.assistant .bubble {
+      background: #fff;
+      border: 1px solid #e4e9f0;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    /* Markdown inside assistant bubble */
+    .bubble h2 { font-size: 15px; margin: 12px 0 6px; color: #0d1b2e; }
+    .bubble h3 { font-size: 14px; margin: 10px 0 4px; color: #0d1b2e; }
+    .bubble p  { margin: 6px 0; }
+    .bubble ul, .bubble ol { padding-left: 18px; margin: 6px 0; }
+    .bubble li { margin: 3px 0; }
+    .bubble strong { color: #0d1b2e; }
+    .bubble code {
+      background: #f0f2f5;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: monospace;
+    }
+    .bubble table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 10px 0;
+      font-size: 13px;
+    }
+    .bubble th {
+      background: #0d1b2e;
+      color: #fff;
+      padding: 7px 10px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .bubble td {
+      padding: 6px 10px;
+      border-bottom: 1px solid #e4e9f0;
+    }
+    .bubble tr:last-child td { border-bottom: none; }
+    .bubble tr:nth-child(even) td { background: #f8f9fc; }
+    .bubble blockquote {
+      border-left: 3px solid #1abc9c;
+      margin: 8px 0;
+      padding: 4px 12px;
+      color: #556;
+      font-style: italic;
+    }
+    .bubble hr { border: none; border-top: 1px solid #e4e9f0; margin: 10px 0; }
+
+    /* Typing indicator */
+    .typing {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 14px 16px;
+    }
+    .typing span {
+      width: 7px;
+      height: 7px;
+      background: #1abc9c;
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* ── Input bar ── */
+    #input-bar {
+      background: #fff;
+      border-top: 1px solid #dde3ec;
+      padding: 16px 24px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+
+    #user-input {
+      flex: 1;
+      border: 1px solid #dde3ec;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: none;
+      outline: none;
+      line-height: 1.5;
+      max-height: 140px;
+      overflow-y: auto;
+      transition: border-color 0.15s;
+      color: #1a1a2e;
+    }
+    #user-input:focus { border-color: #1abc9c; }
+    #user-input::placeholder { color: #aab; }
+
+    #send-btn {
+      background: #1abc9c;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      height: 42px;
+      white-space: nowrap;
+    }
+    #send-btn:hover:not(:disabled) { background: #17a589; }
+    #send-btn:disabled { background: #c0d8d0; cursor: not-allowed; }
+
+    .char-hint {
+      font-size: 11px;
+      color: #aab;
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    /* scrollbar */
+    #chat::-webkit-scrollbar { width: 6px; }
+    #chat::-webkit-scrollbar-track { background: transparent; }
+    #chat::-webkit-scrollbar-thumb { background: #ccd; border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="header-left">
+    <span class="badge">Type 12</span>
+    <h1>Process Optimization Agent</h1>
+  </div>
+  <div class="header-right">
+    <span class="company-label">Bedrijf:</span>
+    <select id="company-select">
+      {% for c in companies %}
+      <option value="{{ c.value }}">{{ c.label }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn-new" onclick="newChat()">Nieuw gesprek</button>
+  </div>
+</header>
+
+<!-- Chat -->
+<div id="chat">
+  <div class="welcome" id="welcome">
+    <h2>Procesoptimalisatie-adviseur</h2>
+    <p>Kies een bedrijf rechtsboven en stel je vraag. De agent analyseert processen,
+    identificeert verspillingen en geeft concrete verbeteradvies — specifiek voor MKB.</p>
+    <div class="suggestions">
+      <button class="suggestion-btn" onclick="useSuggestion(this)">
+        Voer een volledige procesanalyse uit en identificeer de grootste knelpunten.
+      </button>
+      <button class="suggestion-btn" onclick="useSuggestion(this)">
+        Welke drie procesverbeteringen leveren het meeste op binnen een beperkt budget?
+      </button>
+      <button class="suggestion-btn" onclick="useSuggestion(this)">
+        Analyseer het planningsproces en geef concrete verbeteringen.
+      </button>
+      <button class="suggestion-btn" onclick="useSuggestion(this)">
+        Wat zijn de risico's als we de urenregistratie volledig digitaliseren?
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Input -->
+<div id="input-bar">
+  <textarea
+    id="user-input"
+    rows="1"
+    placeholder="Stel een vraag over de processen van het geselecteerde bedrijf..."
+  ></textarea>
+  <button id="send-btn" onclick="sendMessage()">Stuur</button>
+</div>
+
+<script>
+  marked.setOptions({ breaks: true, gfm: true });
+
+  const chatEl   = document.getElementById('chat');
+  const inputEl  = document.getElementById('user-input');
+  const sendBtn  = document.getElementById('send-btn');
+  const selectEl = document.getElementById('company-select');
+
+  let history = [];
+  let isStreaming = false;
+
+  // Auto-resize textarea
+  inputEl.addEventListener('input', () => {
+    inputEl.style.height = 'auto';
+    inputEl.style.height = Math.min(inputEl.scrollHeight, 140) + 'px';
+  });
+
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  selectEl.addEventListener('change', newChat);
+
+  function useSuggestion(btn) {
+    inputEl.value = btn.textContent.trim();
+    inputEl.style.height = 'auto';
+    inputEl.style.height = Math.min(inputEl.scrollHeight, 140) + 'px';
+    inputEl.focus();
+  }
+
+  function newChat() {
+    history = [];
+    chatEl.innerHTML = '';
+    chatEl.appendChild(document.getElementById('welcome') || makeWelcome());
+    const w = document.querySelector('.welcome');
+    if (w) w.style.display = 'block';
+  }
+
+  function hideWelcome() {
+    const w = document.querySelector('.welcome');
+    if (w) w.style.display = 'none';
+  }
+
+  function addMessage(role, content) {
+    hideWelcome();
+    const row = document.createElement('div');
+    row.className = `msg-row ${role}`;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar';
+    avatar.textContent = role === 'user' ? 'JIJ' : 'AI';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+
+    if (role === 'assistant') {
+      bubble.innerHTML = marked.parse(content);
+    } else {
+      bubble.textContent = content;
+    }
+
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+    chatEl.appendChild(row);
+    chatEl.scrollTop = chatEl.scrollHeight;
+    return bubble;
+  }
+
+  function addTyping() {
+    hideWelcome();
+    const row = document.createElement('div');
+    row.className = 'msg-row assistant';
+    row.id = 'typing-row';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar';
+    avatar.textContent = 'AI';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble typing';
+    bubble.innerHTML = '<span></span><span></span><span></span>';
+
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+    chatEl.appendChild(row);
+    chatEl.scrollTop = chatEl.scrollHeight;
+    return row;
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('typing-row');
+    if (t) t.remove();
+  }
+
+  async function sendMessage() {
+    if (isStreaming) return;
+    const text = inputEl.value.trim();
+    if (!text) return;
+
+    isStreaming = true;
+    sendBtn.disabled = true;
+    inputEl.value = '';
+    inputEl.style.height = 'auto';
+
+    addMessage('user', text);
+
+    const typingRow = addTyping();
+
+    const company = selectEl.value;
+
+    let fullResponse = '';
+
+    try {
+      const resp = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ company, message: text, history }),
+      });
+
+      if (!resp.ok) throw new Error('Server error');
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      // Replace typing indicator with real bubble
+      removeTyping();
+      const bubble = addMessage('assistant', '');
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6);
+          if (data === '[DONE]') break;
+          try {
+            const chunk = JSON.parse(data);
+            fullResponse += chunk;
+            bubble.innerHTML = marked.parse(fullResponse);
+            chatEl.scrollTop = chatEl.scrollHeight;
+          } catch {}
+        }
+      }
+
+      history.push({ role: 'user', content: text });
+      history.push({ role: 'assistant', content: fullResponse });
+
+    } catch (err) {
+      removeTyping();
+      addMessage('assistant', `**Fout:** ${err.message}`);
+    }
+
+    isStreaming = false;
+    sendBtn.disabled = false;
+    inputEl.focus();
+  }
+</script>
+
+</body>
+</html>
