@@ -23,8 +23,8 @@ Lees de gesprekshistorie en doe het volgende:
 - bedrijfsnaam
 - branche
 - bedrijfsgrootte
-- kernprocessen (minimaal 1 proces beschreven)
-- bekende_knelpunten
+- kernprocessen (minimaal 1 proces met beschrijving — alleen een procesnaam of activiteitslabel telt NIET; er moet beschreven zijn HOE het proces werkt, wie erbij betrokken is, hoe vaak het plaatsvindt, of wat er mis gaat)
+- bekende_knelpunten (minimaal één concreet knelpunt beschreven — een generieke term als "communicatieproblemen" zonder context telt NIET)
 
 ---
 

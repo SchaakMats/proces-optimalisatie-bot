@@ -199,12 +199,15 @@ def chat():
     history = data.get("history", [])
     mode = data.get("mode", "advisory")
     missing_fields = data.get("missing_fields", [])
+    company_name = data.get("company_name", "")
 
     if not user_message:
         return {"error": "Geen bericht ontvangen"}, 400
 
     if mode == "supervisor":
         system_prompt = load_supervisor_prompt()
+        if company_name:
+            system_prompt = f"BEDRIJFSNAAM (al vastgelegd, sla de vraag hiernaar over): {company_name}\n\n" + system_prompt
         if missing_fields:
             fields_text = "\n".join(f"- {f}" for f in missing_fields)
             system_prompt += f"\n\n## NOG TE VERZAMELEN VELDEN\n{fields_text}"

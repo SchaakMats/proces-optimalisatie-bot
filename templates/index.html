@@ -389,6 +389,7 @@
   let isStreaming = false;
   let mode = 'advisory';
   let companySlug = selectEl.value;
+  let companyName = '';
   let missingFields = [];
 
   // Auto-resize textarea
@@ -412,11 +413,12 @@
       const selectedOpt = selectEl.options[selectEl.selectedIndex];
       const isPending = selectedOpt.dataset.pending === 'true';
       companySlug = selectEl.value;
+      companyName = selectedOpt.textContent.replace(' (intake bezig...)', '').trim();
       missingFields = [];
       if (isPending) {
         mode = 'supervisor';
         newChat();
-        kickoffSupervisor(selectedOpt.textContent.replace(' (intake bezig...)', '').trim());
+        kickoffSupervisor(companyName);
       } else {
         mode = 'advisory';
         newChat();
@@ -468,6 +470,7 @@
     document.getElementById('new-company-bar').style.display = 'none';
 
     companySlug = data.slug;
+    companyName = name;
     mode = 'supervisor';
     missingFields = [];
     history = [];
@@ -492,6 +495,7 @@
           history: [],
           mode: 'supervisor',
           missing_fields: [],
+          company_name: companyName,
         }),
       });
 
@@ -642,7 +646,7 @@
       const resp = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ company: selectEl.value, message: text, history, mode, missing_fields: missingFields }),
+        body: JSON.stringify({ company: selectEl.value, message: text, history, mode, missing_fields: missingFields, company_name: companyName }),
       });
 
       if (!resp.ok) throw new Error('Server error');
@@ -727,6 +731,17 @@
     uploadBtn.textContent = '📎';
     event.target.value = '';
   }
+
+  window.addEventListener('load', () => {
+    const selectedOpt = selectEl.options[selectEl.selectedIndex];
+    if (selectedOpt && selectedOpt.dataset.pending === 'true') {
+      companySlug = selectEl.value;
+      companyName = selectedOpt.textContent.replace(' (intake bezig...)', '').trim();
+      mode = 'supervisor';
+      missingFields = [];
+      kickoffSupervisor(companyName);
+    }
+  });
 </script>
 
 </body>
