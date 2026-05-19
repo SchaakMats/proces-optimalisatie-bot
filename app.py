@@ -151,23 +151,31 @@ def chat():
     company_stem = data.get("company", "")
     user_message = data.get("message", "").strip()
     history = data.get("history", [])
+    mode = data.get("mode", "advisory")
+    missing_fields = data.get("missing_fields", [])
 
     if not user_message:
         return {"error": "Geen bericht ontvangen"}, 400
 
-    system_prompt = load_system_prompt()
+    if mode == "supervisor":
+        system_prompt = load_supervisor_prompt()
+        if missing_fields:
+            fields_text = "\n".join(f"- {f}" for f in missing_fields)
+            system_prompt += f"\n\n## NOG TE VERZAMELEN VELDEN\n{fields_text}"
+    else:
+        system_prompt = load_system_prompt()
+
     company_context = load_company(company_stem)
 
-    # Build messages: history + new user message
     messages = []
     for turn in history:
         messages.append({"role": turn["role"], "content": turn["content"]})
 
-    full_user_content = (
-        f"BEDRIJFSCONTEXT:\n{company_context}\n\nVRAAG VAN DE CONSULTANT:\n{user_message}"
-        if not history
-        else user_message
-    )
+    if mode == "advisory" and not history and company_context:
+        full_user_content = f"BEDRIJFSCONTEXT:\n{company_context}\n\nVRAAG VAN DE CONSULTANT:\n{user_message}"
+    else:
+        full_user_content = user_message
+
     messages.append({"role": "user", "content": full_user_content})
 
     client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
@@ -190,10 +198,7 @@ def chat():
     return Response(
         stream_with_context(generate()),
         mimetype="text/event-stream",
-        headers={
-            "Cache-Control": "no-cache",
-            "X-Accel-Buffering": "no",
-        },
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
 
 
