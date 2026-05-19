@@ -62,6 +62,39 @@ def load_company(stem: str) -> str:
     return path.read_text(encoding="utf-8") if path.exists() else ""
 
 
+def load_supervisor_prompt() -> str:
+    return (AGENT_DIR / "supervisor_prompt.md").read_text(encoding="utf-8")
+
+
+def load_summary_prompt() -> str:
+    return (AGENT_DIR / "summary_prompt.md").read_text(encoding="utf-8")
+
+
+def call_summary_agent(history: list, company_slug: str) -> dict:
+    client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+    summary_prompt = load_summary_prompt()
+
+    history_text = "\n".join([
+        f"{'KLANT' if m['role'] == 'user' else 'SUPERVISOR'}: {m['content']}"
+        for m in history
+    ])
+
+    message = client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=2000,
+        system=summary_prompt,
+        messages=[{"role": "user", "content": f"GESPREKSHISTORIE:\n{history_text}"}],
+    )
+
+    result = parse_summary_response(message.content[0].text)
+
+    return {
+        "missing_fields": result.get("missing_fields", REQUIRED_FIELDS),
+        "intake_complete": result.get("intake_complete", False),
+        "md_content": result.get("md_content", ""),
+    }
+
+
 @app.route("/")
 def index():
     return render_template("index.html", companies=list_companies())
@@ -89,6 +122,27 @@ def new_company():
         )
 
     return {"slug": slug, "name": name}
+
+
+@app.route("/api/summary", methods=["POST"])
+def summary():
+    data = request.get_json()
+    company_slug = data.get("company_slug", "")
+    history = data.get("history", [])
+
+    if not company_slug or not history:
+        return {"error": "company_slug en history zijn verplicht"}, 400
+
+    result = call_summary_agent(history, company_slug)
+
+    md_content = result.get("md_content", "")
+    if md_content:
+        (BEDRIJVEN_DIR / f"{company_slug}.md").write_text(md_content, encoding="utf-8")
+
+    return {
+        "missing_fields": result.get("missing_fields", REQUIRED_FIELDS),
+        "intake_complete": result.get("intake_complete", False),
+    }
 
 
 @app.route("/api/chat", methods=["POST"])

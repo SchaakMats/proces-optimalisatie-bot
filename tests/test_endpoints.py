@@ -57,3 +57,40 @@ def test_new_company_idempotent(client, tmp_path, monkeypatch):
     )
     assert resp.status_code == 200
     assert (tmp_path / "bestaand_bedrijf.md").read_text() == "# Existing"
+
+
+def test_summary_missing_fields_returns_400(client):
+    resp = client.post(
+        "/api/summary",
+        data=json.dumps({}),
+        content_type="application/json",
+    )
+    assert resp.status_code == 400
+
+
+def test_summary_calls_agent_and_writes_file(client, tmp_path, monkeypatch):
+    import app as app_module
+
+    monkeypatch.setattr(app_module, "BEDRIJVEN_DIR", tmp_path)
+
+    fake_result = {
+        "missing_fields": [],
+        "intake_complete": True,
+        "md_content": "# Bedrijfsprofiel — Testbedrijf\n\n## Basisinformatie\n- **Bedrijfsnaam:** Testbedrijf\n",
+    }
+
+    def fake_call_summary_agent(history, slug):
+        return fake_result
+
+    monkeypatch.setattr(app_module, "call_summary_agent", fake_call_summary_agent)
+
+    resp = client.post(
+        "/api/summary",
+        data=json.dumps({"company_slug": "testbedrijf", "history": [{"role": "user", "content": "hoi"}]}),
+        content_type="application/json",
+    )
+    assert resp.status_code == 200
+    data = resp.get_json()
+    assert data["intake_complete"] is True
+    assert data["missing_fields"] == []
+    assert (tmp_path / "testbedrijf.md").exists()
