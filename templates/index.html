@@ -451,6 +451,7 @@
       } else {
         mode = 'advisory';
         newChat();
+        kickoffAdvisory();
       }
       updateDeleteBtn();
     }
@@ -540,32 +541,20 @@
     await kickoffSupervisor(name);
   }
 
-  async function kickoffSupervisor(companyName) {
-    const starterMessage = `Start de intake voor een nieuw bedrijfsprofiel. De bedrijfsnaam is al vastgelegd: "${companyName}". Sla de vraag naar de bedrijfsnaam over en begin direct met de volgende vragen.`;
-    addMessage('user', starterMessage);
+  async function streamKickoff(fetchBody, onDone) {
     addTyping();
     let fullResponse = '';
-
     try {
       const resp = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          company: companySlug,
-          message: starterMessage,
-          history: [],
-          mode: 'supervisor',
-          missing_fields: [],
-          company_name: companyName,
-        }),
+        body: JSON.stringify(fetchBody),
       });
-
       removeTyping();
       const bubble = addMessage('assistant', '');
       const reader = resp.body.getReader();
       const decoder = new TextDecoder();
       let buffer = '';
-
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
@@ -584,15 +573,34 @@
           } catch {}
         }
       }
-
-      history.push({ role: 'user', content: starterMessage });
-      history.push({ role: 'assistant', content: fullResponse });
-
-      await runSummary();
+      if (onDone) onDone(fullResponse);
     } catch (err) {
       removeTyping();
       addMessage('assistant', `**Fout:** ${err.message}`);
     }
+  }
+
+  async function kickoffSupervisor(companyName) {
+    const trigger = 'Start de intake.';
+    await streamKickoff(
+      { company: companySlug, message: trigger, history: [], mode: 'supervisor', missing_fields: [], company_name: companyName },
+      async (response) => {
+        history.push({ role: 'user', content: trigger });
+        history.push({ role: 'assistant', content: response });
+        await runSummary();
+      }
+    );
+  }
+
+  async function kickoffAdvisory() {
+    const trigger = 'Start het gesprek.';
+    await streamKickoff(
+      { company: companySlug, message: trigger, history: [], mode: 'advisory', missing_fields: [], company_name: companyName },
+      (response) => {
+        history.push({ role: 'user', content: trigger });
+        history.push({ role: 'assistant', content: response });
+      }
+    );
   }
 
   function addSystemMessage(text) {
@@ -800,12 +808,16 @@
       return;
     }
     const selectedOpt = selectEl.options[selectEl.selectedIndex];
-    if (selectedOpt && selectedOpt.dataset.pending === 'true') {
-      companySlug = selectEl.value;
-      companyName = selectedOpt.textContent.replace(' (intake bezig...)', '').trim();
+    if (!selectedOpt) return;
+    companySlug = selectEl.value;
+    companyName = selectedOpt.textContent.replace(' (intake bezig...)', '').trim();
+    missingFields = [];
+    if (selectedOpt.dataset.pending === 'true') {
       mode = 'supervisor';
-      missingFields = [];
       kickoffSupervisor(companyName);
+    } else {
+      mode = 'advisory';
+      kickoffAdvisory();
     }
   });
 </script>
