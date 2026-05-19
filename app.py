@@ -5,6 +5,7 @@ Start: python3 app.py  →  open http://localhost:5000
 """
 
 import os
+import io
 import json
 import re
 from pathlib import Path
@@ -41,6 +42,21 @@ def parse_summary_response(text: str) -> dict:
             except json.JSONDecodeError:
                 pass
     return {"missing_fields": REQUIRED_FIELDS, "intake_complete": False, "md_content": ""}
+
+
+def extract_text(file_bytes: bytes, filename: str) -> str:
+    ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+    if ext == "txt":
+        return file_bytes.decode("utf-8", errors="ignore")
+    if ext == "pdf":
+        import pypdf
+        reader = pypdf.PdfReader(io.BytesIO(file_bytes))
+        return "\n".join(page.extract_text() or "" for page in reader.pages)
+    if ext == "docx":
+        import docx
+        doc = docx.Document(io.BytesIO(file_bytes))
+        return "\n".join(para.text for para in doc.paragraphs)
+    raise ValueError(f"Niet ondersteund bestandstype: .{ext}")
 
 
 def load_system_prompt() -> str:
