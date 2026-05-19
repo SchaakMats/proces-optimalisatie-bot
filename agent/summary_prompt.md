@@ -18,13 +18,16 @@ Lees de gesprekshistorie en doe het volgende:
 
 ---
 
-## VERPLICHTE VELDEN (intake klaar als alle vijf beantwoord zijn — ook "onbekend" telt)
+## VERPLICHTE VELDEN (intake klaar als alle acht beantwoord zijn — ook "onbekend" telt)
 
 - bedrijfsnaam
 - branche
 - bedrijfsgrootte
-- kernprocessen (minimaal 1 proces met beschrijving — alleen een procesnaam of activiteitslabel telt NIET; er moet beschreven zijn HOE het proces werkt, wie erbij betrokken is, hoe vaak het plaatsvindt, of wat er mis gaat)
-- bekende_knelpunten (minimaal één concreet knelpunt beschreven — een generieke term als "communicatieproblemen" zonder context telt NIET)
+- activiteiten (wat doet het bedrijf? — alleen een sectorlabel telt NIET; er moet beschreven zijn wat ze doen en voor wie)
+- teamstructuur (hoe is het bedrijf georganiseerd? wie doet wat? — "12 medewerkers" zonder verdere structuur telt NIET)
+- systemen_en_tools (welke software of tools gebruiken ze? — "geen idee" of "onbekend" telt wel als antwoord)
+- bekende_knelpunten (minimaal één concreet knelpunt met enige context — een losse term zonder uitleg telt NIET)
+- al_geprobeerd (hebben ze al iets geprobeerd? — "nee" of "onbekend" telt ook)
 
 ---
 
@@ -61,29 +64,29 @@ Gebruik altijd deze structuur voor md_content:
 - **Locatie:** [waarde of "Niet gevraagd"]
 - **Bedrijfsvorm:** [waarde of "Niet gevraagd"]
 
-## Kernprocessen
+## Activiteiten
 
-### Proces 1: [NAAM]
-- **Beschrijving:** [waarde]
-- **Betrokken rollen:** [waarde of "Onbekend"]
-- **Frequentie:** [waarde of "Onbekend"]
-- **Bekende problemen:** [waarde of "Geen genoemd"]
+[Beschrijving van wat het bedrijf doet, welke diensten of producten ze leveren, voor wie]
+
+## Teamstructuur
+
+[Hoe is het bedrijf georganiseerd? Welke rollen of afdelingen zijn er?]
+
+## Systemen en Tools
+
+[Welke software, apps of tools worden dagelijks gebruikt?]
 
 ## Huidige Situatie
 
-[waarde of "Niet besproken"]
-
-## Beschikbare Data
-
-[waarde of "Niet besproken"]
+[Wat speelt er op dit moment intern?]
 
 ## Bekende Knelpunten
 
-[waarde of "Geen specifieke knelpunten besproken"]
+[Beschrijving van knelpunten met context — niet alleen een label]
 
-## Consultant-Focus
+## Al Geprobeerde Oplossingen
 
-[waarde of "Niet besproken"]
+[Wat heeft het bedrijf al geprobeerd om het knelpunt op te lossen?]
 ```
 
 ---

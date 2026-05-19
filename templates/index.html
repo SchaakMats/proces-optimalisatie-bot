@@ -424,11 +424,20 @@
     deleteBtn.style.display = (selectEl.value && selectEl.value !== '__new__') ? 'inline-block' : 'none';
   }
 
+  function showNewCompanyBar() {
+    document.getElementById('new-company-bar').style.display = 'flex';
+    document.getElementById('new-company-name').focus();
+    deleteBtn.style.display = 'none';
+  }
+
+  // Fires even when __new__ is already selected (change event wouldn't fire then)
+  selectEl.addEventListener('click', () => {
+    if (selectEl.value === '__new__') showNewCompanyBar();
+  });
+
   selectEl.addEventListener('change', () => {
     if (selectEl.value === '__new__') {
-      document.getElementById('new-company-bar').style.display = 'flex';
-      document.getElementById('new-company-name').focus();
-      deleteBtn.style.display = 'none';
+      showNewCompanyBar();
     } else {
       const selectedOpt = selectEl.options[selectEl.selectedIndex];
       const isPending = selectedOpt.dataset.pending === 'true';
@@ -474,9 +483,7 @@
       missingFields = [];
       history = [];
       newChat();
-      deleteBtn.style.display = 'none';
-      document.getElementById('new-company-bar').style.display = 'flex';
-      document.getElementById('new-company-name').focus();
+      showNewCompanyBar();
     }
   }
 
@@ -788,6 +795,10 @@
 
   window.addEventListener('load', () => {
     updateDeleteBtn();
+    if (selectEl.value === '__new__') {
+      showNewCompanyBar();
+      return;
+    }
     const selectedOpt = selectEl.options[selectEl.selectedIndex];
     if (selectedOpt && selectedOpt.dataset.pending === 'true') {
       companySlug = selectEl.value;
