@@ -467,7 +467,7 @@
   }
 
   async function kickoffSupervisor(companyName) {
-    const starterMessage = `Ik wil graag informatie invullen voor een nieuw bedrijf: ${companyName}`;
+    const starterMessage = `Start de intake voor een nieuw bedrijfsprofiel. De bedrijfsnaam is al vastgelegd: "${companyName}". Sla de vraag naar de bedrijfsnaam over en begin direct met de volgende vragen.`;
     addMessage('user', starterMessage);
     addTyping();
     let fullResponse = '';
