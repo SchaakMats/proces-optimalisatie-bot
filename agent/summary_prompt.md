@@ -18,13 +18,16 @@ Lees de gesprekshistorie en doe het volgende:
 
 ---
 
-## VERPLICHTE VELDEN (intake klaar als alle vijf beantwoord zijn — ook "onbekend" telt)
+## VERPLICHTE VELDEN (intake klaar als alle acht beantwoord zijn — ook "onbekend" telt)
 
 - bedrijfsnaam
 - branche
 - bedrijfsgrootte
-- activiteiten (wat doet het bedrijf? — alleen "consultant" of "detachering" zonder verdere context telt NIET; er moet een beschrijving zijn van wat ze doen of leveren)
-- bekende_knelpunten (minimaal één concreet knelpunt of uitdaging beschreven — een losse term zonder context telt NIET)
+- activiteiten (wat doet het bedrijf? — alleen een sectorlabel telt NIET; er moet beschreven zijn wat ze doen en voor wie)
+- teamstructuur (hoe is het bedrijf georganiseerd? wie doet wat? — "12 medewerkers" zonder verdere structuur telt NIET)
+- systemen_en_tools (welke software of tools gebruiken ze? — "geen idee" of "onbekend" telt wel als antwoord)
+- bekende_knelpunten (minimaal één concreet knelpunt met enige context — een losse term zonder uitleg telt NIET)
+- al_geprobeerd (hebben ze al iets geprobeerd? — "nee" of "onbekend" telt ook)
 
 ---
 
@@ -63,19 +66,27 @@ Gebruik altijd deze structuur voor md_content:
 
 ## Activiteiten
 
-[Beschrijving van wat het bedrijf doet, welke diensten of producten ze leveren]
+[Beschrijving van wat het bedrijf doet, welke diensten of producten ze leveren, voor wie]
+
+## Teamstructuur
+
+[Hoe is het bedrijf georganiseerd? Welke rollen of afdelingen zijn er?]
+
+## Systemen en Tools
+
+[Welke software, apps of tools worden dagelijks gebruikt?]
 
 ## Huidige Situatie
 
-[waarde of "Niet besproken"]
-
-## Beschikbare Data
-
-[waarde of "Niet besproken"]
+[Wat speelt er op dit moment intern?]
 
 ## Bekende Knelpunten
 
-[waarde of "Geen specifieke knelpunten besproken"]
+[Beschrijving van knelpunten met context — niet alleen een label]
+
+## Al Geprobeerde Oplossingen
+
+[Wat heeft het bedrijf al geprobeerd om het knelpunt op te lossen?]
 ```
 
 ---
