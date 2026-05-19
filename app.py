@@ -67,6 +67,30 @@ def index():
     return render_template("index.html", companies=list_companies())
 
 
+@app.route("/api/companies")
+def companies_list():
+    return {"companies": list_companies()}
+
+
+@app.route("/api/new-company", methods=["POST"])
+def new_company():
+    data = request.get_json()
+    name = (data.get("name") or "").strip()
+    if not name:
+        return {"error": "Naam is verplicht"}, 400
+
+    slug = slugify(name)
+    path = BEDRIJVEN_DIR / f"{slug}.md"
+
+    if not path.exists():
+        path.write_text(
+            f"# Bedrijfsprofiel — {name}\n\n*Profiel wordt aangemaakt via intake gesprek.*\n",
+            encoding="utf-8",
+        )
+
+    return {"slug": slug, "name": name}
+
+
 @app.route("/api/chat", methods=["POST"])
 def chat():
     data = request.get_json()
