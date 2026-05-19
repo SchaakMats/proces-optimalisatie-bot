@@ -497,9 +497,10 @@
 
   function newChat() {
     history = [];
-    chatEl.innerHTML = '';
-    chatEl.appendChild(document.getElementById('welcome') || makeWelcome());
-    const w = document.querySelector('.welcome');
+    Array.from(chatEl.children).forEach(child => {
+      if (!child.classList.contains('welcome')) child.remove();
+    });
+    const w = chatEl.querySelector('.welcome');
     if (w) w.style.display = 'block';
   }
 
