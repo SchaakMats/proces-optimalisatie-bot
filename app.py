@@ -161,6 +161,34 @@ def summary():
     }
 
 
+ALLOWED_EXTENSIONS = {"pdf", "docx", "txt"}
+
+
+@app.route("/api/upload", methods=["POST"])
+def upload():
+    if "file" not in request.files:
+        return {"error": "Geen bestand ontvangen"}, 400
+
+    file = request.files["file"]
+    if not file.filename:
+        return {"error": "Geen bestandsnaam"}, 400
+
+    ext = file.filename.rsplit(".", 1)[-1].lower() if "." in file.filename else ""
+    if ext not in ALLOWED_EXTENSIONS:
+        return {"error": f"Bestandstype .{ext} wordt niet ondersteund. Gebruik PDF, DOCX of TXT."}, 400
+
+    file_bytes = file.read()
+    try:
+        text = extract_text(file_bytes, file.filename)
+    except Exception as e:
+        return {"error": f"Fout bij verwerken bestand: {str(e)}"}, 500
+
+    if not text.strip():
+        return {"error": "Geen leesbare tekst gevonden in het bestand"}, 400
+
+    return {"filename": file.filename, "text": text, "chars": len(text)}
+
+
 @app.route("/api/chat", methods=["POST"])
 def chat():
     data = request.get_json()

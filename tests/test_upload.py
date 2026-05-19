@@ -45,3 +45,44 @@ def test_extract_unsupported_type():
     from app import extract_text
     with pytest.raises(ValueError, match="Niet ondersteund"):
         extract_text(b"data", "test.xlsx")
+
+
+def test_upload_txt_returns_text(client):
+    data = {"file": (io.BytesIO(b"Testinhoud voor upload"), "test.txt")}
+    resp = client.post("/api/upload", data=data, content_type="multipart/form-data")
+    assert resp.status_code == 200
+    result = resp.get_json()
+    assert result["filename"] == "test.txt"
+    assert "Testinhoud" in result["text"]
+    assert result["chars"] > 0
+
+
+def test_upload_no_file_returns_400(client):
+    resp = client.post("/api/upload", data={}, content_type="multipart/form-data")
+    assert resp.status_code == 400
+
+
+def test_upload_unsupported_type_returns_400(client):
+    data = {"file": (io.BytesIO(b"data"), "test.xlsx")}
+    resp = client.post("/api/upload", data=data, content_type="multipart/form-data")
+    assert resp.status_code == 400
+
+
+def test_upload_empty_file_returns_400(client):
+    data = {"file": (io.BytesIO(b"   "), "leeg.txt")}
+    resp = client.post("/api/upload", data=data, content_type="multipart/form-data")
+    assert resp.status_code == 400
+
+
+def test_upload_docx_returns_text(client):
+    import docx
+    doc = docx.Document()
+    doc.add_paragraph("Testbedrijf intake document")
+    buf = io.BytesIO()
+    doc.save(buf)
+    buf.seek(0)
+    data = {"file": (buf, "rapport.docx")}
+    resp = client.post("/api/upload", data=data, content_type="multipart/form-data")
+    assert resp.status_code == 200
+    result = resp.get_json()
+    assert "Testbedrijf" in result["text"]
