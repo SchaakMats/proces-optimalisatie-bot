@@ -367,6 +367,8 @@
 
 <!-- Input -->
 <div id="input-bar">
+  <input type="file" id="file-input" accept=".pdf,.docx,.txt" style="display:none;" onchange="handleFileUpload(event)" />
+  <button id="upload-btn" onclick="document.getElementById('file-input').click()" title="Bijlage toevoegen (PDF, DOCX, TXT)" style="background:transparent;border:1px solid #dde3ec;border-radius:10px;padding:10px 12px;font-size:16px;cursor:pointer;color:#8899aa;transition:all 0.15s;height:42px;flex-shrink:0;" onmouseover="this.style.borderColor='#1abc9c';this.style.color='#1abc9c'" onmouseout="this.style.borderColor='#dde3ec';this.style.color='#8899aa'">📎</button>
   <textarea
     id="user-input"
     rows="1"
@@ -681,6 +683,41 @@
     isStreaming = false;
     sendBtn.disabled = false;
     inputEl.focus();
+  }
+
+  async function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const uploadBtn = document.getElementById('upload-btn');
+    uploadBtn.disabled = true;
+    uploadBtn.textContent = '⏳';
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const resp = await fetch('/api/upload', { method: 'POST', body: formData });
+      const data = await resp.json();
+
+      if (!resp.ok) {
+        addMessage('assistant', `**Fout bij uploaden:** ${data.error}`);
+      } else {
+        const contextMessage = `[Bijlage: ${data.filename}]\n\n${data.text}`;
+        addMessage('user', `📎 ${data.filename} (${data.chars} tekens geüpload)`);
+        history.push({ role: 'user', content: contextMessage });
+
+        if (mode === 'supervisor') {
+          await runSummary();
+        }
+      }
+    } catch (err) {
+      addMessage('assistant', `**Fout bij uploaden:** ${err.message}`);
+    }
+
+    uploadBtn.disabled = false;
+    uploadBtn.textContent = '📎';
+    event.target.value = '';
   }
 </script>
 
