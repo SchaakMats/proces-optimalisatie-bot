@@ -69,7 +69,9 @@ def list_companies() -> list[dict]:
         if f.name == "template.md":
             continue
         label = f.stem.replace("_", " ").replace("-", " ").title()
-        companies.append({"value": f.stem, "label": label})
+        content = f.read_text(encoding="utf-8")
+        pending = "Profiel wordt aangemaakt via intake gesprek" in content
+        companies.append({"value": f.stem, "label": label, "pending": pending})
     return companies
 
 

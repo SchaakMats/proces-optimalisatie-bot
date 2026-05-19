@@ -324,7 +324,7 @@
     <span class="company-label">Bedrijf:</span>
     <select id="company-select">
       {% for c in companies %}
-      <option value="{{ c.value }}">{{ c.label }}</option>
+      <option value="{{ c.value }}" data-pending="{{ 'true' if c.pending else 'false' }}">{{ c.label }}{% if c.pending %} (intake bezig...){% endif %}</option>
       {% endfor %}
       <option value="__new__">— Nieuw bedrijf toevoegen...</option>
     </select>
@@ -409,10 +409,18 @@
       document.getElementById('new-company-bar').style.display = 'flex';
       document.getElementById('new-company-name').focus();
     } else {
+      const selectedOpt = selectEl.options[selectEl.selectedIndex];
+      const isPending = selectedOpt.dataset.pending === 'true';
       companySlug = selectEl.value;
-      mode = 'advisory';
       missingFields = [];
-      newChat();
+      if (isPending) {
+        mode = 'supervisor';
+        newChat();
+        kickoffSupervisor(selectedOpt.textContent.replace(' (intake bezig...)', '').trim());
+      } else {
+        mode = 'advisory';
+        newChat();
+      }
     }
   });
 
