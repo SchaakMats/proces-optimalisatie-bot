@@ -142,6 +142,15 @@ def new_company():
     return {"slug": slug, "name": name}
 
 
+@app.route("/api/company/<slug>", methods=["DELETE"])
+def delete_company(slug):
+    path = BEDRIJVEN_DIR / f"{slug}.md"
+    if not path.exists():
+        return {"error": "Bedrijf niet gevonden"}, 404
+    path.unlink()
+    return {"deleted": slug}
+
+
 @app.route("/api/summary", methods=["POST"])
 def summary():
     data = request.get_json()

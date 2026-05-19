@@ -90,6 +90,18 @@
     }
     .btn-new:hover { border-color: #1abc9c; color: #1abc9c; }
 
+    .btn-delete {
+      background: transparent;
+      border: 1px solid #2a4060;
+      color: #8899aa;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-delete:hover { border-color: #e74c3c; color: #e74c3c; }
+
     /* ── Chat area ── */
     #chat {
       flex: 1;
@@ -338,6 +350,7 @@
       <button onclick="confirmNewCompany()" style="background:#1abc9c;color:#fff;border:none;border-radius:6px;padding:6px 12px;font-size:13px;cursor:pointer;">Starten</button>
       <button onclick="cancelNewCompany()" style="background:transparent;color:#8899aa;border:1px solid #2a4060;border-radius:6px;padding:6px 12px;font-size:13px;cursor:pointer;">Annuleren</button>
     </div>
+    <button id="delete-btn" class="btn-delete" onclick="deleteCompany()" title="Verwijder dit bedrijfsprofiel" style="display:none;">🗑</button>
     <button class="btn-new" onclick="newChat()">Nieuw gesprek</button>
   </div>
 </header>
@@ -405,10 +418,17 @@
     }
   });
 
+  const deleteBtn = document.getElementById('delete-btn');
+
+  function updateDeleteBtn() {
+    deleteBtn.style.display = (selectEl.value && selectEl.value !== '__new__') ? 'inline-block' : 'none';
+  }
+
   selectEl.addEventListener('change', () => {
     if (selectEl.value === '__new__') {
       document.getElementById('new-company-bar').style.display = 'flex';
       document.getElementById('new-company-name').focus();
+      deleteBtn.style.display = 'none';
     } else {
       const selectedOpt = selectEl.options[selectEl.selectedIndex];
       const isPending = selectedOpt.dataset.pending === 'true';
@@ -423,8 +443,40 @@
         mode = 'advisory';
         newChat();
       }
+      updateDeleteBtn();
     }
   });
+
+  async function deleteCompany() {
+    if (!companySlug) return;
+    const label = selectEl.options[selectEl.selectedIndex].textContent.replace(' (intake bezig...)', '').trim();
+    if (!confirm(`Weet je zeker dat je "${label}" wilt verwijderen? Dit kan niet ongedaan worden gemaakt.`)) return;
+
+    const resp = await fetch(`/api/company/${companySlug}`, { method: 'DELETE' });
+    if (!resp.ok) {
+      const data = await resp.json();
+      alert(`Fout: ${data.error}`);
+      return;
+    }
+
+    const optToRemove = selectEl.querySelector(`option[value="${companySlug}"]`);
+    if (optToRemove) optToRemove.remove();
+
+    // Switch to first real company, or clear state
+    const firstReal = Array.from(selectEl.options).find(o => o.value && o.value !== '__new__');
+    if (firstReal) {
+      selectEl.value = firstReal.value;
+      selectEl.dispatchEvent(new Event('change'));
+    } else {
+      companySlug = '';
+      companyName = '';
+      mode = 'advisory';
+      missingFields = [];
+      history = [];
+      newChat();
+      deleteBtn.style.display = 'none';
+    }
+  }
 
   function useSuggestion(btn) {
     inputEl.value = btn.textContent.trim();
@@ -733,6 +785,7 @@
   }
 
   window.addEventListener('load', () => {
+    updateDeleteBtn();
     const selectedOpt = selectEl.options[selectEl.selectedIndex];
     if (selectedOpt && selectedOpt.dataset.pending === 'true') {
       companySlug = selectEl.value;
