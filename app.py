@@ -6,6 +6,7 @@ Start: python3 app.py  →  open http://localhost:5000
 
 import os
 import json
+import re
 from pathlib import Path
 from flask import Flask, render_template, request, Response, stream_with_context
 import anthropic
@@ -17,6 +18,29 @@ app = Flask(__name__)
 
 BEDRIJVEN_DIR = Path("bedrijven")
 AGENT_DIR = Path("agent")
+
+REQUIRED_FIELDS = ["bedrijfsnaam", "branche", "bedrijfsgrootte", "kernprocessen", "bekende_knelpunten"]
+
+
+def slugify(name: str) -> str:
+    s = name.lower().strip()
+    s = re.sub(r'\.(?=[a-z0-9])', '', s)  # remove dots in abbreviations like b.v. → bv
+    s = re.sub(r'[^a-z0-9\s]', ' ', s)
+    s = re.sub(r'\s+', '_', s.strip())
+    return s
+
+
+def parse_summary_response(text: str) -> dict:
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        match = re.search(r'\{.*\}', text, re.DOTALL)
+        if match:
+            try:
+                return json.loads(match.group())
+            except json.JSONDecodeError:
+                pass
+    return {"missing_fields": REQUIRED_FIELDS, "intake_complete": False, "md_content": ""}
 
 
 def load_system_prompt() -> str:
