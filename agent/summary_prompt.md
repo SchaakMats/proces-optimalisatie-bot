@@ -23,8 +23,8 @@ Lees de gesprekshistorie en doe het volgende:
 - bedrijfsnaam
 - branche
 - bedrijfsgrootte
-- kernprocessen (minimaal 1 proces met beschrijving — alleen een procesnaam of activiteitslabel telt NIET; er moet beschreven zijn HOE het proces werkt, wie erbij betrokken is, hoe vaak het plaatsvindt, of wat er mis gaat)
-- bekende_knelpunten (minimaal één concreet knelpunt beschreven — een generieke term als "communicatieproblemen" zonder context telt NIET)
+- activiteiten (wat doet het bedrijf? — alleen "consultant" of "detachering" zonder verdere context telt NIET; er moet een beschrijving zijn van wat ze doen of leveren)
+- bekende_knelpunten (minimaal één concreet knelpunt of uitdaging beschreven — een losse term zonder context telt NIET)
 
 ---
 
@@ -61,13 +61,9 @@ Gebruik altijd deze structuur voor md_content:
 - **Locatie:** [waarde of "Niet gevraagd"]
 - **Bedrijfsvorm:** [waarde of "Niet gevraagd"]
 
-## Kernprocessen
+## Activiteiten
 
-### Proces 1: [NAAM]
-- **Beschrijving:** [waarde]
-- **Betrokken rollen:** [waarde of "Onbekend"]
-- **Frequentie:** [waarde of "Onbekend"]
-- **Bekende problemen:** [waarde of "Geen genoemd"]
+[Beschrijving van wat het bedrijf doet, welke diensten of producten ze leveren]
 
 ## Huidige Situatie
 
@@ -80,10 +76,6 @@ Gebruik altijd deze structuur voor md_content:
 ## Bekende Knelpunten
 
 [waarde of "Geen specifieke knelpunten besproken"]
-
-## Consultant-Focus
-
-[waarde of "Niet besproken"]
 ```
 
 ---
