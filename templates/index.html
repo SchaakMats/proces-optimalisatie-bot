@@ -326,7 +326,18 @@
       {% for c in companies %}
       <option value="{{ c.value }}">{{ c.label }}</option>
       {% endfor %}
+      <option value="__new__">— Nieuw bedrijf toevoegen...</option>
     </select>
+    <div id="new-company-bar" style="display:none; align-items:center; gap:8px;">
+      <input
+        id="new-company-name"
+        type="text"
+        placeholder="Bedrijfsnaam..."
+        style="background:#1a2d47;color:#fff;border:1px solid #2a4060;border-radius:6px;padding:6px 12px;font-size:13px;outline:none;min-width:200px;"
+      />
+      <button onclick="confirmNewCompany()" style="background:#1abc9c;color:#fff;border:none;border-radius:6px;padding:6px 12px;font-size:13px;cursor:pointer;">Starten</button>
+      <button onclick="cancelNewCompany()" style="background:transparent;color:#8899aa;border:1px solid #2a4060;border-radius:6px;padding:6px 12px;font-size:13px;cursor:pointer;">Annuleren</button>
+    </div>
     <button class="btn-new" onclick="newChat()">Nieuw gesprek</button>
   </div>
 </header>
@@ -374,6 +385,9 @@
 
   let history = [];
   let isStreaming = false;
+  let mode = 'advisory';
+  let companySlug = selectEl.value;
+  let missingFields = [];
 
   // Auto-resize textarea
   inputEl.addEventListener('input', () => {
@@ -388,7 +402,17 @@
     }
   });
 
-  selectEl.addEventListener('change', newChat);
+  selectEl.addEventListener('change', () => {
+    if (selectEl.value === '__new__') {
+      document.getElementById('new-company-bar').style.display = 'flex';
+      document.getElementById('new-company-name').focus();
+    } else {
+      companySlug = selectEl.value;
+      mode = 'advisory';
+      missingFields = [];
+      newChat();
+    }
+  });
 
   function useSuggestion(btn) {
     inputEl.value = btn.textContent.trim();
@@ -403,6 +427,131 @@
     chatEl.appendChild(document.getElementById('welcome') || makeWelcome());
     const w = document.querySelector('.welcome');
     if (w) w.style.display = 'block';
+  }
+
+  function cancelNewCompany() {
+    document.getElementById('new-company-bar').style.display = 'none';
+    selectEl.value = companySlug || selectEl.options[0].value;
+  }
+
+  async function confirmNewCompany() {
+    const input = document.getElementById('new-company-name');
+    const name = input.value.trim();
+    if (!name) return;
+
+    const resp = await fetch('/api/new-company', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name }),
+    });
+    const data = await resp.json();
+
+    const newOpt = document.createElement('option');
+    newOpt.value = data.slug;
+    newOpt.textContent = name + ' (intake bezig...)';
+    newOpt.dataset.pending = 'true';
+    const newOption = selectEl.querySelector('option[value="__new__"]');
+    selectEl.insertBefore(newOpt, newOption);
+    selectEl.value = data.slug;
+
+    input.value = '';
+    document.getElementById('new-company-bar').style.display = 'none';
+
+    companySlug = data.slug;
+    mode = 'supervisor';
+    missingFields = [];
+    history = [];
+    newChat();
+
+    await kickoffSupervisor(name);
+  }
+
+  async function kickoffSupervisor(companyName) {
+    const starterMessage = `Ik wil graag informatie invullen voor een nieuw bedrijf: ${companyName}`;
+    addMessage('user', starterMessage);
+    addTyping();
+    let fullResponse = '';
+
+    try {
+      const resp = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          company: companySlug,
+          message: starterMessage,
+          history: [],
+          mode: 'supervisor',
+          missing_fields: [],
+        }),
+      });
+
+      removeTyping();
+      const bubble = addMessage('assistant', '');
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const chunk = line.slice(6);
+          if (chunk === '[DONE]') break;
+          try {
+            const text = JSON.parse(chunk);
+            fullResponse += text;
+            bubble.innerHTML = marked.parse(fullResponse);
+            chatEl.scrollTop = chatEl.scrollHeight;
+          } catch {}
+        }
+      }
+
+      history.push({ role: 'user', content: starterMessage });
+      history.push({ role: 'assistant', content: fullResponse });
+
+      await runSummary();
+    } catch (err) {
+      removeTyping();
+      addMessage('assistant', `**Fout:** ${err.message}`);
+    }
+  }
+
+  function addSystemMessage(text) {
+    const div = document.createElement('div');
+    div.style.cssText = 'text-align:center;color:#8899aa;font-size:12px;padding:8px 0;border-top:1px solid #e4e9f0;border-bottom:1px solid #e4e9f0;margin:4px 0;';
+    div.textContent = text;
+    chatEl.appendChild(div);
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+
+  async function runSummary() {
+    if (mode !== 'supervisor') return;
+    try {
+      const resp = await fetch('/api/summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ company_slug: companySlug, history }),
+      });
+      const data = await resp.json();
+      missingFields = data.missing_fields || [];
+
+      if (data.intake_complete) {
+        mode = 'advisory';
+        const opt = selectEl.querySelector(`option[value="${companySlug}"]`);
+        if (opt) {
+          opt.textContent = opt.textContent.replace(' (intake bezig...)', '');
+          delete opt.dataset.pending;
+        }
+        addSystemMessage('Intake afgerond — de adviseur is nu actief. Stel je procesoptimalisatievraag.');
+        history = [];
+      }
+    } catch (err) {
+      console.error('Summary agent fout:', err);
+    }
   }
 
   function hideWelcome() {
@@ -483,7 +632,7 @@
       const resp = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ company, message: text, history }),
+        body: JSON.stringify({ company: selectEl.value, message: text, history, mode, missing_fields: missingFields }),
       });
 
       if (!resp.ok) throw new Error('Server error');
@@ -519,6 +668,10 @@
 
       history.push({ role: 'user', content: text });
       history.push({ role: 'assistant', content: fullResponse });
+
+      if (mode === 'supervisor') {
+        await runSummary();
+      }
 
     } catch (err) {
       removeTyping();
